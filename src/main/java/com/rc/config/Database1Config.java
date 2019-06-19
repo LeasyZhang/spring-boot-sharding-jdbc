@@ -1,10 +1,13 @@
 package com.rc.config;
 
 
+import com.alibaba.druid.pool.DruidDataSource;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-@ConfigurationProperties(prefix = "ds0")
+import javax.sql.DataSource;
+
+@ConfigurationProperties(prefix = "ds1")
 @Component
 public class Database1Config {
 
@@ -56,5 +59,15 @@ public class Database1Config {
 
     public void setDatabaseName(String databaseName) {
         this.databaseName = databaseName;
+    }
+
+    public DataSource createDataSource() {
+        DruidDataSource dataSource = new DruidDataSource();
+        dataSource.setDriverClassName(getDriverClassName());
+        dataSource.setUrl(getUrl());
+        dataSource.setUsername(getUsername());
+        dataSource.setPassword(getPassword());
+
+        return dataSource;
     }
 }
