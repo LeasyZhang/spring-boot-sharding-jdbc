@@ -26,7 +26,7 @@ public class ItemRepoPostgreTest extends BaseTest {
         item.setContent("test content ");
         item.setCreatedTime(Instant.now());
         item.setUpdatedTime(Instant.now());
-        item.setOwnerId(1112300103);
+        item.setOwnerId(1112300104);
         item.setUsername(UUID.randomUUID().toString());
 
         itemList.add(itemRepository.save(item));
@@ -35,15 +35,13 @@ public class ItemRepoPostgreTest extends BaseTest {
     @Test
     public void testQuery() {
         itemList.stream().forEach(item -> {
-            Optional<List<Item>> saved = itemRepository.findItemByOwnerId(item.getOwnerId());
-            saved.ifPresent(items -> {
-                items.stream().forEach(i -> System.out.println(i));
-            });
+            List<Item> saved = itemRepository.findAll();
+            saved.stream().forEach(item1 -> System.out.println(item1));
         });
     }
 
     @After
     public void clean() {
-        itemRepository.delete(itemList.get(0));
+        //itemRepository.delete(itemList.get(0));
     }
 }
