@@ -4,11 +4,7 @@ import com.rc.entity.Item;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -17,7 +13,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 
-public class ItemRepoPostgreTest extends BaseTest{
+public class ItemRepoPostgreTest extends BaseTest {
 
     @Autowired
     private ItemRepository itemRepository;
@@ -39,8 +35,10 @@ public class ItemRepoPostgreTest extends BaseTest{
     @Test
     public void testQuery() {
         itemList.stream().forEach(item -> {
-            Optional<Item> saved = itemRepository.findItemByOwnerId(item.getOwnerId());
-            saved.ifPresent(i -> System.out.println(i));
+            Optional<List<Item>> saved = itemRepository.findItemByOwnerId(item.getOwnerId());
+            saved.ifPresent(items -> {
+                items.stream().forEach(i -> System.out.println(i));
+            });
         });
     }
 
