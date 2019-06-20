@@ -16,9 +16,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-public class ItemRepoPostgreTest {
+
+public class ItemRepoPostgreTest extends BaseTest{
 
     @Autowired
     private ItemRepository itemRepository;

@@ -34,6 +34,7 @@ public class DataSourceConfig {
         ShardingRuleConfiguration shardingRuleConfiguration = new ShardingRuleConfiguration();
         shardingRuleConfiguration.getTableRuleConfigs().add(getItemTableConfiguration());
         shardingRuleConfiguration.getBindingTableGroups().add("sh_item");
+        shardingRuleConfiguration.setDefaultDataSourceName("sharding_db0");
         shardingRuleConfiguration.setDefaultDatabaseShardingStrategyConfig(new InlineShardingStrategyConfiguration("owner_id", "sharding_db${owner_id % 2}"));
         shardingRuleConfiguration.setDefaultTableShardingStrategyConfig(new InlineShardingStrategyConfiguration("owner_id", "sh_item_${owner_id % 4}"));
 
