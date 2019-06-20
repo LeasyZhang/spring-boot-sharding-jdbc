@@ -7,6 +7,7 @@ drop table if exists sh_item_0;
 drop table if exists sh_item_1;
 drop table if exists sh_item_2;
 drop table if exists sh_item_3;
+drop table if exists sh_relation;
 
 create table sh_item_0
 (
@@ -59,3 +60,13 @@ create table sh_item_3
 );
 
 create index on sh_item_3 (owner_id, created_time);
+
+create table sh_relation
+(
+  id           serial not null,
+  created_time timestamp without time zone,
+  updated_time timestamp without time zone,
+  table_name     varchar(80),
+  item_id     bigint,
+  primary key (id)
+);
