@@ -5,6 +5,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class ItemRepoPostgreTest extends BaseTest {
         item.setContent("test content ");
         item.setCreatedTime(Instant.now());
         item.setUpdatedTime(Instant.now());
-        item.setOwnerId(1112300104);
+        item.setOwnerId(1112300180);
         item.setUsername(UUID.randomUUID().toString());
 
         itemList.add(itemRepository.save(item));
@@ -34,14 +35,32 @@ public class ItemRepoPostgreTest extends BaseTest {
 
     @Test
     public void testQuery() {
-        itemList.stream().forEach(item -> {
-            List<Item> saved = itemRepository.findAll();
-            saved.stream().forEach(item1 -> System.out.println(item1));
+        List<Item> saved = itemRepository.findAll();
+        saved.forEach(item -> {
+            System.out.println(item);
         });
+    }
+
+    @Test
+    public void testBulkSave() {
+        List<Item> items = new ArrayList<>();
+        for(int i = 1; i < 10; i ++) {
+            Item item = new Item();
+            item.setContent("test content x");
+            item.setCreatedTime(Instant.now());
+            item.setUpdatedTime(Instant.now());
+            item.setOwnerId(1112300130 + i);
+            item.setUsername(UUID.randomUUID().toString());
+            items.add(item);
+        }
+        List<Item> results = itemRepository.bulkSave(items);
+        results.stream().forEach(item -> System.out.println(item));
     }
 
     @After
     public void clean() {
-        //itemRepository.delete(itemList.get(0));
+        if (!CollectionUtils.isEmpty(itemList)) {
+            itemRepository.delete(itemList.get(0));
+        }
     }
 }

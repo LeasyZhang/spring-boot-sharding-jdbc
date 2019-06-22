@@ -1,4 +1,14 @@
 package com.rc.repo;
 
-public class BaseRepository {
+import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
+
+public abstract class BaseRepository {
+
+    @Autowired
+    private DataAccess dataAccess;
+
+    protected Session getSession() {
+        return dataAccess.getSession();
+    }
 }
