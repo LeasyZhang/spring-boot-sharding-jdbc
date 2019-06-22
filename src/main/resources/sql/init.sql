@@ -20,7 +20,7 @@ create table sh_item_0
   primary key (id)
 );
 
-create index on sh_item_0 (owner_id, created_time);
+create unique index on sh_item_0 (owner_id);
 
 create table sh_item_1
 (
@@ -33,7 +33,7 @@ create table sh_item_1
   primary key (id)
 );
 
-create index on sh_item_1 (owner_id, created_time);
+create unique index on sh_item_1 (owner_id);
 
 create table sh_item_2
 (
@@ -46,7 +46,7 @@ create table sh_item_2
   primary key (id)
 );
 
-create index on sh_item_2 (owner_id, created_time);
+create unique index on sh_item_2 (owner_id);
 
 create table sh_item_3
 (
@@ -59,7 +59,7 @@ create table sh_item_3
   primary key (id)
 );
 
-create index on sh_item_3 (owner_id, created_time);
+create unique index on sh_item_3 (owner_id);
 
 create table sh_relation
 (
