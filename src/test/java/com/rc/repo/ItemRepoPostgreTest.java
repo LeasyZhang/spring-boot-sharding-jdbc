@@ -60,7 +60,7 @@ public class ItemRepoPostgreTest extends BaseTest {
     @After
     public void clean() {
         if (!CollectionUtils.isEmpty(itemList)) {
-            itemRepository.delete(itemList.get(0));
+            itemList.stream().forEach(item -> itemRepository.delete(item));
         }
     }
 }

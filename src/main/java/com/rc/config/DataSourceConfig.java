@@ -2,8 +2,8 @@ package com.rc.config;
 
 import io.shardingsphere.api.config.rule.ShardingRuleConfiguration;
 import io.shardingsphere.api.config.rule.TableRuleConfiguration;
-import io.shardingsphere.api.config.strategy.InlineShardingStrategyConfiguration;
-import io.shardingsphere.core.keygen.DefaultKeyGenerator;
+import io.shardingsphere.api.config.strategy.NoneShardingStrategyConfiguration;
+import io.shardingsphere.api.config.strategy.StandardShardingStrategyConfiguration;
 import io.shardingsphere.shardingjdbc.api.ShardingDataSourceFactory;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,12 +41,9 @@ public class DataSourceConfig {
         shardingRuleConfiguration.getTableRuleConfigs().add(getItemTableConfiguration());
         shardingRuleConfiguration.getBindingTableGroups().add("sh_item");
         shardingRuleConfiguration.setDefaultDataSourceName("sharding_db0");
-        shardingRuleConfiguration.setDefaultDatabaseShardingStrategyConfig(new InlineShardingStrategyConfiguration("owner_id", "sharding_db${owner_id % 2}"));
-        shardingRuleConfiguration.setDefaultTableShardingStrategyConfig(new InlineShardingStrategyConfiguration("owner_id", "sh_item_${owner_id % 4}"));
-
+        shardingRuleConfiguration.setDefaultTableShardingStrategyConfig(new NoneShardingStrategyConfiguration());
         Map<String, DataSource> dataSourceMap = new HashMap<>(2);
         dataSourceMap.put(database0Config.getDatabaseName(), database0Config.createDataSource());
-        dataSourceMap.put(database1Config.getDatabaseName(), database1Config.createDataSource());
 
         return ShardingDataSourceFactory.createDataSource(dataSourceMap, shardingRuleConfiguration, new HashMap<>(), new Properties());
     }
@@ -54,14 +51,15 @@ public class DataSourceConfig {
     TableRuleConfiguration getItemTableConfiguration() {
         TableRuleConfiguration config = new TableRuleConfiguration();
         config.setLogicTable("sh_item");
-        config.setActualDataNodes("sharding_db${0..1}.sh_item_${0..3}");
+        config.setActualDataNodes("sharding_db0.sh_item_${0..3}");
+        config.setTableShardingStrategyConfig(new StandardShardingStrategyConfiguration("owner_id", new ItemShardingStrategy()));
         return config;
     }
 
     private Properties hibernateProperties() {
         Properties properties = new Properties();
         properties.put("hibernate.dialect", environment.getRequiredProperty("hibernate.dialect"));
-        properties.put("hibernate.show_sql", environment.getRequiredProperty("hibernate.show_sql"));
+        properties.put("hibernate.show_sql", true);
         properties.put("hibernate.format_sql", environment.getRequiredProperty("hibernate.format_sql"));
         properties.put("hibernate.hbm2ddl.auto", environment.getRequiredProperty("hibernate.hbm2ddl.auto"));
         properties.put("hibernate.temp.use_jdbc_metadata_defaults", "false");
